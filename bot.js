@@ -1,10 +1,24 @@
-let twit = require('twit');
-let config = require('./config.js');
-let messages = require('./messages.js');
+const twit = require('twit');
+const config = require('./config.js');
+const messages = require('./messages.js');
+const keywords = require('./keywords.js');
 
 const Bot = new twit(config);
-const stream = Bot.stream('statuses/filter', { track: ['quero morrer', 'vou me matar'] });
+
+//make a loop in keywords
+let stream = Bot.stream('statuses/filter', { track: keywords.keyword_PTBR });
 
 stream.on('tweet', (tweet) => {
   console.log('tweet', tweet);
+
+  let params = {
+    status: '@' + tweet.user.screen_name + messages.message_PTBR,
+    in_reply_to_status_id: tweet.id
+  };
+
+  Bot.post('statuses/update', params, (error, tweet, res) => {
+    (error) => console.log('err', error),
+    (tweet) => console.log('tweet', tweet),
+    (res) => console.log('res', res)
+  });
 });
