@@ -5,11 +5,11 @@ const keywords = require('./keywords.js');
 
 const Bot = new twit(config);
 
-//make a loop in keywords
-let stream = Bot.stream('statuses/filter', { track: keywords.keyword_PTBR });
+let keywords_arr = Object.values(keywords);
+let stream = Bot.stream('statuses/filter', { track: keywords_arr });
 
 stream.on('tweet', (tweet) => {
-  console.log('tweet', tweet);
+  console.log('tweet', tweet.lang);
 
   let params = {
     status: '@' + tweet.user.screen_name + messages.message_PTBR,
