@@ -9,16 +9,21 @@ let keywords_arr = Object.values(keywords);
 let stream = Bot.stream('statuses/filter', { track: keywords_arr });
 
 stream.on('tweet', (tweet) => {
-  console.log('tweet', tweet.lang);
 
   let params = {
-    status: '@' + tweet.user.screen_name + messages.message_PTBR,
-    in_reply_to_status_id: tweet.id
+    status: '@' + tweet.user.screen_name + messageInUserLanguage(tweet.lang),
+    in_reply_to_status_id: tweet.id_str
   };
 
-  Bot.post('statuses/update', params, (error, tweet, res) => {
+  console.log(params);
+
+  /*Bot.post('statuses/update', params, (error, tweet, res) => {
     (error) => console.log('err', error),
     (tweet) => console.log('tweet', tweet),
     (res) => console.log('res', res)
-  });
+  });*/
 });
+
+function messageInUserLanguage(lang) {
+  return messages[lang];
+}
