@@ -4,7 +4,7 @@ const natural  = require('natural');
 const messages = require('./messages.js');
 const keywords = require('./keywords.js');
 
-const tokenizer = new natural.TreebankWordTokenizer();
+const tokenizer = new natural.WordTokenizer();
 require('dotenv').load();
 
 const Bot = new twit({
@@ -19,8 +19,9 @@ let stream = Bot.stream('statuses/filter', { track: keywords_arr });
 
 stream.on('tweet', (tweet) => {
   console.log(tweet.text);
-  let a = tokenizer.tokenize(tweet.text);
-  console.log(a);
+  let arr = tokenizer.tokenize(tweet.text).map((word) => {
+    console.log(natural.JaroWinklerDistance(word, "morrer"));
+  });
 
   /*
   let params = {
@@ -39,9 +40,13 @@ function messageInUserLanguage(lang) {
 function sendTweetForUser(params) {
   console.log(params);
 
-  /*Bot.post('statuses/update', params, (error, tweet, res) => {
+  /*
+  * DO NOT UNCOMMENT THIS BLOCK DURING THE DEVELOPMENT
+  *
+  Bot.post('statuses/update', params, (error, tweet, res) => {
     (error) => console.log('err', error),
     (tweet) => console.log('tweet', tweet),
     (res) => console.log('res', res)
-  });*/
+  });
+  */
 }
