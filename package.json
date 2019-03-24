@@ -4,14 +4,13 @@
   "description": "An application to identify and assist people with depression problems with help numbers in their country.",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Victor Hugo Rocha",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^6.0.0",
-    "natural": "^0.6.1",
+    "algorithmia": "^0.3.10",
     "twit": "^2.2.10"
   }
 }
