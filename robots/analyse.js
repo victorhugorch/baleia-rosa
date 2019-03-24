@@ -1,6 +1,10 @@
 const algorithmia = require('algorithmia');
 
-function analyse(sentence) {
+const robots = {
+    tweet: require('./tweet'),
+};
+
+function analyse(sentence, tweet) {
     const alghorithimiaCredentials = require('../credentials/algo.json');
     const algorithmiaAuthenticated = algorithmia(alghorithimiaCredentials.apiKey);
     const SentimentAnalysisAlgo = algorithmiaAuthenticated.algo("nlp/SentimentAnalysis/1.0.5?timeout=300");
@@ -14,11 +18,8 @@ function analyse(sentence) {
         .then((res) => {
             let feelingValue = res.result[0].sentiment;
 
-            if (feelingValue > -0.7) {
-                console.info(input);
-                console.info(feelingValue);
-
-                // todo: send a private message
+            if  (feelingValue > -0.8) {
+                robots.tweet.sendPrivateTweet(tweet);
             }
         });
 }

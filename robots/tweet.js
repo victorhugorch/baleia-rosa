@@ -12,18 +12,21 @@ const Bot = new twit({
 });
 
 function getAndAnalyseTweet() {
-    let params = {track: ['morrer', 'n aguento mais']};
+    let params = {
+        track: ['vontade de morrer', 'n aguento mais', 'quero morrer'],
+        language: 'pt'
+    };
     const stream = Bot.stream('statuses/filter', params);
 
     stream.on('tweet', (tweet) => {
         let tweetSentence = tweet.text;
-        console.log(tweetSentence);
-        // robots.analyse(tweetSentence);
+        // console.log(tweet.text);
+        robots.analyse(tweetSentence, tweet);
     });
 }
 
-function sendPrivateTweet() {
-    //
+function sendPrivateTweet(tweet) {
+    // todo: implement send a direct message to user
 }
 
 module.exports = {
