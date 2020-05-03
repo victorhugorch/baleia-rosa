@@ -1,35 +1,53 @@
 const twit = require('twit');
-const twitterCredentials = require('../credentials/tweet.json');
 const robots = {
-    analyse: require('./analyse')
+    analyse: require('./analyse'),
+    messages: require('./messages')
 };
 
-const Bot = new twit({
-    consumer_key: twitterCredentials.BOT_CONSUMER_KEY,
-    consumer_secret: twitterCredentials.BOT_CONSUMER_SECRET,
-    access_token: twitterCredentials.BOT_ACCESS_TOKEN,
-    access_token_secret: twitterCredentials.BOT_ACCESS_TOKEN_SECRET
+const twitter = new twit({
+    consumer_key: process.env.BOT_CONSUMER_KEY,
+    consumer_secret: process.env.BOT_CONSUMER_SECRET,
+    access_token: process.env.BOT_ACCESS_TOKEN,
+    access_token_secret: process.env.BOT_ACCESS_TOKEN_SECRET
 });
 
+const LANG = 'pt';
+
 function getAndAnalyseTweet() {
+    // todo: filter params for more than one language
     let params = {
-        track: ['vontade de morrer', 'n aguento mais', 'quero morrer'],
-        language: 'pt'
+        track: ['me sinto sozinh', 'viver um inferno', 'vazio dentro de mim'],
+        language: LANG
     };
-    const stream = Bot.stream('statuses/filter', params);
+
+    const stream = twitter.stream('statuses/filter', params);
 
     stream.on('tweet', (tweet) => {
-        let tweetSentence = tweet.text;
-        // console.log(tweet.text);
-        robots.analyse(tweetSentence, tweet);
+        const tweetSentence = tweet.text;
+        console.log('Tweet to reply: ' + tweetSentence);
+
+        replyTweet(tweet.user.screen_name, tweet.id_str);
+        // todo: enable analyse workflow before send message
+        //robots.analyse(tweetSentence, tweet);
     });
 }
 
-function sendPrivateTweet(tweet) {
-    // todo: implement send a direct message to user
+function replyTweet(username, tweetId) {
+    const message = robots.messages.getMessage(LANG, username);
+    const res = {
+        status: message,
+        in_reply_to_status_id: '' + tweetId
+    };
+
+    console.log('Tweet response: ' + message);
+
+    twitter.post('statuses/update', res,
+        (err) => {
+            console.log(err)
+        }
+    );
 }
 
 module.exports = {
-    getAndAnalyseTweet,
-    sendPrivateTweet
+    getAndAnalyseTweet
 };
