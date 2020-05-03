@@ -19,7 +19,7 @@ function analyse(sentence, tweet) {
             let feelingValue = res.result[0].sentiment;
 
             if  (feelingValue > -0.8) {
-                robots.tweet.sendPrivateTweet(tweet);
+                //robots.tweet.sendPrivateTweet(tweet);
             }
         });
 }
