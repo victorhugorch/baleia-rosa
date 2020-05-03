@@ -33,7 +33,7 @@ function getAndAnalyseTweet() {
 }
 
 function replyTweet(username, tweetId) {
-    const message = robots.messages.getMessage(LANG, username);
+    let message = robots.messages.getMessage(LANG, username);
     const res = {
         status: message,
         in_reply_to_status_id: '' + tweetId
